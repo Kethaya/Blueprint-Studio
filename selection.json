@@ -2,15 +2,10 @@
   "project": {
     "title": "The Rise of Claude"
   },
-
   "scenes": [
-
     {
-
       "scene_id": 1,
-
       "selection": {
-
         "video": {
           "provider": "Pexels",
           "id": 928374,
@@ -19,73 +14,55 @@
           "local_path": "assets/videos/scene001.mp4",
           "downloaded": true
         },
-
         "image": {},
-
         "logo": {
-          "name": "Anthropic",
           "local_path": "assets/logos/anthropic.png",
+          "name": "Anthropic",
           "downloaded": true
         },
-
         "website": {
           "url": "https://anthropic.com"
         },
-
         "website_screenshot": {
           "local_path": "assets/screenshots/scene001.png",
           "downloaded": true
         },
-
         "icon": {},
-
         "text": {
           "content": "",
           "font": ""
         },
-
         "sfx": {
-          "name": "Deep Boom",
           "local_path": "assets/sfx/deep_boom.wav",
+          "name": "Deep Boom",
           "downloaded": true
         }
-
       }
-
     },
-
     {
-
       "scene_id": 2,
-
       "selection": {
-
-        "video": {},
-
+        "video": {
+          "provider": "Pexels",
+          "id": 999999,
+          "title": "Test Video",
+          "url": "https://example.com/test.mp4",
+          "downloaded": false
+        },
         "image": {},
-
         "logo": {},
-
         "website": {},
-
         "website_screenshot": {},
-
         "icon": {},
-
         "text": {
           "content": "ITS CRIME?",
           "font": "Bebas Neue"
         },
-
         "sfx": {
           "name": "Impact Hit",
-          "local_path": "",
           "downloaded": false
         }
-
       }
-
     }
-
   ]
 }
