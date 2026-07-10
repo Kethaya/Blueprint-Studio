@@ -28,10 +28,10 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         
-        # Initialize state
-        self.state = ApplicationState()
-        self.search_manager = SearchManager(self.state.assets_dir)
-        self.download_service = DownloadService(self.state.assets_dir)
+        # Initialize state (renamed to avoid conflict with tkinter's state() method)
+        self.app_state = ApplicationState()
+        self.search_manager = SearchManager(self.app_state.assets_dir)
+        self.download_service = DownloadService(self.app_state.assets_dir)
         
         # UI state
         self.scene_cards: List[SceneCard] = []
@@ -57,7 +57,7 @@ class App(ctk.CTk):
         self._load_default_blueprint()
         
         # Setup save callback
-        self.state.selection_manager.add_save_callback(self._on_selection_saved)
+        self.app_state.selection_manager.add_save_callback(self._on_selection_saved)
     
     def _build_top_toolbar(self):
         """Build the top toolbar with action buttons"""
@@ -509,8 +509,8 @@ class App(ctk.CTk):
     def _load_blueprint_file(self, path: Path):
         """Load a blueprint file"""
         try:
-            if self.state.load_project(path):
-                self.proj_lbl.configure(text=f"Project: {self.state.blueprint_manager.project.title}")
+            if self.app_state.load_project(path):
+                self.proj_lbl.configure(text=f"Project: {self.app_state.blueprint_manager.project.title}")
                 self._populate_scene_list()
                 self._select_scene(0)
                 self._update_status("✓ Project loaded")
@@ -536,7 +536,7 @@ class App(ctk.CTk):
         self.scene_cards.clear()
         
         # Create scene cards
-        for i, scene in enumerate(self.state.blueprint_manager.scenes):
+        for i, scene in enumerate(self.app_state.blueprint_manager.scenes):
             scene_num = f"Scene {scene.scene_id:03d}"
             card = SceneCard(
                 self.scene_scroll,
@@ -551,12 +551,12 @@ class App(ctk.CTk):
     
     def _select_scene(self, idx: int):
         """Select a scene and update the UI"""
-        if idx < 0 or idx >= len(self.state.blueprint_manager.scenes):
+        if idx < 0 or idx >= len(self.app_state.blueprint_manager.scenes):
             return
         
-        self.state.set_scene(idx)
-        scene = self.state.get_current_scene()
-        selection = self.state.get_current_selection()
+        self.app_state.set_scene(idx)
+        scene = self.app_state.get_current_scene()
+        selection = self.app_state.get_current_selection()
         
         # Update scene cards visual state
         for i, card in enumerate(self.scene_cards):
@@ -653,7 +653,7 @@ class App(ctk.CTk):
     
     def _on_search_type_changed(self, selected: str):
         """Handle search type change"""
-        self.state.search_type = selected
+        self.app_state.search_type = selected
         self.status_search.configure(text=f"Search Type: {selected}")
         self._generate_asset_cards(selected)
     
@@ -734,7 +734,7 @@ class App(ctk.CTk):
     def _select_asset(self, result: Dict[str, Any]):
         """Handle asset selection"""
         asset_type = result.get("asset_type", "unknown")
-        scene = self.state.get_current_scene()
+        scene = self.app_state.get_current_scene()
         
         if not scene:
             return
@@ -750,15 +750,15 @@ class App(ctk.CTk):
         
         # Update selection based on asset type
         if asset_type == "video":
-            self.state.selection_manager.set_video_selection(scene.scene_id, selection)
+            self.app_state.selection_manager.set_video_selection(scene.scene_id, selection)
         elif asset_type == "image":
-            self.state.selection_manager.set_image_selection(scene.scene_id, selection)
+            self.app_state.selection_manager.set_image_selection(scene.scene_id, selection)
         elif asset_type == "logo":
-            self.state.selection_manager.set_logo_selection(scene.scene_id, selection)
+            self.app_state.selection_manager.set_logo_selection(scene.scene_id, selection)
         elif asset_type == "icon":
-            self.state.selection_manager.set_icon_selection(scene.scene_id, selection)
+            self.app_state.selection_manager.set_icon_selection(scene.scene_id, selection)
         elif asset_type == "sfx":
-            self.state.selection_manager.set_sfx_selection(scene.scene_id, selection)
+            self.app_state.selection_manager.set_sfx_selection(scene.scene_id, selection)
         
         # Update UI
         self._update_status(f"✓ Selected: {result.get('title')}")
@@ -793,7 +793,7 @@ class App(ctk.CTk):
         
         if not query:
             # Use keywords from current scene
-            scene = self.state.get_current_scene()
+            scene = self.app_state.get_current_scene()
             if scene:
                 query = scene.keywords[0] if scene.keywords else scene.title.split()[0]
         
@@ -854,7 +854,7 @@ class App(ctk.CTk):
             self._on_search_type_changed(target_normalized)
         
         # Auto-populate search with context
-        scene = self.state.get_current_scene()
+        scene = self.app_state.get_current_scene()
         if scene:
             search_terms = {
                 "Video": scene.search_video,
@@ -871,7 +871,7 @@ class App(ctk.CTk):
     
     def _download_asset(self, asset_type: str):
         """Download the selected asset"""
-        scene = self.state.get_current_scene()
+        scene = self.app_state.get_current_scene()
         if not scene:
             return
         
@@ -879,7 +879,7 @@ class App(ctk.CTk):
         self.status_queue.configure(text="Queue: Downloading")
         
         # Get the selection
-        selection = self.state.get_current_selection()
+        selection = self.app_state.get_current_selection()
         
         # Map asset type to selection attribute
         type_map = {
@@ -908,7 +908,7 @@ class App(ctk.CTk):
         
         def on_download_complete(success: bool, path: str):
             if success:
-                self.state.selection_manager.mark_downloaded(scene.scene_id, attr_name, path)
+                self.app_state.selection_manager.mark_downloaded(scene.scene_id, attr_name, path)
                 self.after(0, lambda: self._update_status(f"✓ Downloaded: {Path(path).name}"))
                 self.after(0, lambda: self._refresh_media_block(attr_name, sel))
             else:
@@ -929,8 +929,8 @@ class App(ctk.CTk):
         downloaded = 0
         total = 0
         
-        for scene in self.state.blueprint_manager.scenes:
-            selection = self.state.selection_manager.get_selection(scene.scene_id)
+        for scene in self.app_state.blueprint_manager.scenes:
+            selection = self.app_state.selection_manager.get_selection(scene.scene_id)
             
             # Check each asset type
             for attr_name in ["video", "image", "logo", "icon", "sfx"]:
@@ -952,7 +952,7 @@ class App(ctk.CTk):
         
         def on_complete(success: bool, path: str):
             if success:
-                self.state.selection_manager.mark_downloaded(scene_id, asset_type, path)
+                self.app_state.selection_manager.mark_downloaded(scene_id, asset_type, path)
         
         self.download_service.download_in_background(sel.url, f"{filename}{ext}", asset_type, on_complete)
     
@@ -987,11 +987,11 @@ class App(ctk.CTk):
         }
         
         # Create scene cards in grid
-        for i, scene in enumerate(self.state.blueprint_manager.scenes):
+        for i, scene in enumerate(self.app_state.blueprint_manager.scenes):
             stype = scene.scene_type.upper()
             num = f"Scene {scene.scene_id:03d}"
             
-            is_selected = (i == self.state.current_scene_index)
+            is_selected = (i == self.app_state.current_scene_index)
             b_color = "#4F46E5" if is_selected else "#2D3139"
             f_color = "#1A1D24" if is_selected else "#1E2024"
             
@@ -1043,13 +1043,13 @@ class App(ctk.CTk):
         # Configure grid
         for c in range(4):
             grid_frame.grid_columnconfigure(c, weight=1)
-        grid_frame.grid_rowconfigure((len(self.state.blueprint_manager.scenes) // 4) + 1, weight=1)
+        grid_frame.grid_rowconfigure((len(self.app_state.blueprint_manager.scenes) // 4) + 1, weight=1)
     
     def _save_project(self):
         """Save the current project"""
         try:
             # Force save selection
-            self.state.selection_manager._auto_save()
+            self.app_state.selection_manager._auto_save()
             self._update_status("✓ Project saved")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to save project: {e}")
@@ -1059,7 +1059,7 @@ class App(ctk.CTk):
         import subprocess
         import sys
         
-        assets_path = self.state.assets_dir.absolute()
+        assets_path = self.app_state.assets_dir.absolute()
         
         try:
             if sys.platform == 'win32':
@@ -1073,9 +1073,9 @@ class App(ctk.CTk):
     
     def _refresh_view(self):
         """Refresh the current view"""
-        scene = self.state.get_current_scene()
+        scene = self.app_state.get_current_scene()
         if scene:
-            selection = self.state.get_current_selection()
+            selection = self.app_state.get_current_selection()
             self._update_center_panel(scene, selection)
         self._update_status("✓ View refreshed")
     
@@ -1085,7 +1085,7 @@ class App(ctk.CTk):
     
     def _on_title_changed(self, event=None):
         """Handle title change"""
-        scene = self.state.get_current_scene()
+        scene = self.app_state.get_current_scene()
         if scene:
             new_title = self.ent_title.get()
             # In production, would update blueprint
@@ -1097,11 +1097,11 @@ class App(ctk.CTk):
     
     def _on_text_content_changed(self, event=None):
         """Handle text content change"""
-        scene = self.state.get_current_scene()
+        scene = self.app_state.get_current_scene()
         if scene:
             content = self.txt_content_editor.get("1.0", "end").strip()
             font = self.lbl_selected_font_display.cget("text")
-            self.state.selection_manager.set_text(scene.scene_id, content, font)
+            self.app_state.selection_manager.set_text(scene.scene_id, content, font)
     
     def _on_notes_changed(self, event=None):
         """Handle notes change"""
