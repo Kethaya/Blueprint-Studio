@@ -1,0 +1,108 @@
+{
+  "project": {
+    "title": "The Rise of Claude",
+    "description": "Documentary about Anthropic and Claude AI.",
+    "language": "English",
+    "default_font": "Bebas Neue"
+  },
+
+  "scenes": [
+
+    {
+      "scene_id": 1,
+
+      "scene_type": "video",
+
+      "title": "Government Decision",
+
+      "narration": "In February 2026, the U.S. government did something it had never done before.",
+
+      "subtitle": "",
+
+      "keywords": [
+        "White House",
+        "Washington DC",
+        "Government"
+      ],
+
+      "search": {
+
+        "video": [
+          "White House drone",
+          "Washington aerial"
+        ],
+
+        "image": [
+          "White House"
+        ],
+
+        "logo": [
+          "Anthropic"
+        ],
+
+        "website": [
+          "https://anthropic.com"
+        ],
+
+        "icon": [
+          "government"
+        ],
+
+        "sfx": [
+          "Deep Boom",
+          "Whoosh"
+        ]
+
+      },
+
+      "text": {
+        "enabled": false,
+        "content": "",
+        "font": ""
+      },
+
+      "editing_note": "Start with an aerial drone shot and keep the opening cinematic."
+    },
+
+    {
+      "scene_id": 2,
+
+      "scene_type": "text_only",
+
+      "title": "Main Statement",
+
+      "narration": "Its crime? Refusing to hand over unrestricted control of its AI.",
+
+      "subtitle": "",
+
+      "keywords": [],
+
+      "search": {
+
+        "video": [],
+
+        "image": [],
+
+        "logo": [],
+
+        "website": [],
+
+        "icon": [],
+
+        "sfx": [
+          "Impact Hit"
+        ]
+
+      },
+
+      "text": {
+        "enabled": true,
+        "content": "ITS CRIME?",
+        "font": "Bebas Neue"
+      },
+
+      "editing_note": "Display large centered white text on a black background."
+    }
+
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "project": {
+    "title": "The Rise of Claude"
+  },
+
+  "scenes": [
+
+    {
+
+      "scene_id": 1,
+
+      "selection": {
+
+        "video": {
+          "provider": "Pexels",
+          "id": 928374,
+          "title": "White House Drone",
+          "url": "https://www.pexels.com/video/928374/",
+          "local_path": "assets/videos/scene001.mp4",
+          "downloaded": true
+        },
+
+        "image": {},
+
+        "logo": {
+          "name": "Anthropic",
+          "local_path": "assets/logos/anthropic.png",
+          "downloaded": true
+        },
+
+        "website": {
+          "url": "https://anthropic.com"
+        },
+
+        "website_screenshot": {
+          "local_path": "assets/screenshots/scene001.png",
+          "downloaded": true
+        },
+
+        "icon": {},
+
+        "text": {
+          "content": "",
+          "font": ""
+        },
+
+        "sfx": {
+          "name": "Deep Boom",
+          "local_path": "assets/sfx/deep_boom.wav",
+          "downloaded": true
+        }
+
+      }
+
+    },
+
+    {
+
+      "scene_id": 2,
+
+      "selection": {
+
+        "video": {},
+
+        "image": {},
+
+        "logo": {},
+
+        "website": {},
+
+        "website_screenshot": {},
+
+        "icon": {},
+
+        "text": {
+          "content": "ITS CRIME?",
+          "font": "Bebas Neue"
+        },
+
+        "sfx": {
+          "name": "Impact Hit",
+          "local_path": "",
+          "downloaded": false
+        }
+
+      }
+
+    }
+
+  ]
+}
